@@ -18,7 +18,4 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Behaviors\" />
-	</ItemGroup>
 </Project>

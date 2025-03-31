@@ -5,12 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Catalog.Products.Dtos;
+using FluentValidation;
 using Shared.CQRS;
 
 namespace Catalog.Products.Features.DeleteProduct
 {
     public record DeleteProductCommand(Guid ProductId) : ICommand<DeleteProductResult>;
     public record DeleteProductResult(bool IsSuccess);
+    public class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>
+    { 
+        public DeleteProductCommandValidator()
+        {
+            RuleFor(x => x.ProductId).NotEmpty().WithMessage("Product Id is required");
+        }
+    }
 
     internal class DeleteProductHandler(CatalogDbContext dbContext) : ICommandHandler<DeleteProductCommand, DeleteProductResult>
     {

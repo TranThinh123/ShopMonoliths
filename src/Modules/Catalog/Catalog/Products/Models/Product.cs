@@ -17,7 +17,7 @@ namespace Catalog.Products.Models
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
              var product = new Product
              {
-                Id = Guid.NewGuid(),
+                Id = id,
                 Name = name,
                 Category = category,
                 Description = description,

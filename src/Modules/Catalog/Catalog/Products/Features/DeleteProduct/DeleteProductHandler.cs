@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Catalog.Products.Dtos;
+using Catalog.Products.Exceptions;
 using FluentValidation;
 using Shared.CQRS;
 
@@ -27,7 +28,8 @@ namespace Catalog.Products.Features.DeleteProduct
             var product = await dbContext.products.FindAsync([command.ProductId], cancellationToken: cancellationToken);    
             if(product == null)
             {
-                throw new Exception($"Product not found: {command.ProductId}");
+                throw new ProductNotFoundException(command.ProductId);
+                
             }
             dbContext.products.Remove(product);
             await dbContext.SaveChangesAsync(cancellationToken);

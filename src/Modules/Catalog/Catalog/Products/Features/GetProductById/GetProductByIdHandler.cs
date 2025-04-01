@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catalog.Products.Dtos;
+using Catalog.Products.Exceptions;
 using Mapster;
 using Shared.CQRS;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Catalog.Products.Features.GetProductById
 {
@@ -20,7 +22,7 @@ namespace Catalog.Products.Features.GetProductById
                 .SingleOrDefaultAsync(p => p.Id == query.Id, cancellationToken);
             if (product is null)
             {
-                throw new Exception($"Product not found: {query.Id}");
+                throw new ProductNotFoundException(query.Id);
             }
             var productDto = product.Adapt<ProductDto>();
             return new GetProductByIdResult(productDto);

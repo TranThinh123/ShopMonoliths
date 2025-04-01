@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Catalog.Products.Dtos;
+using Catalog.Products.Exceptions;
 using FluentValidation;
 using Shared.CQRS;
 
@@ -30,7 +31,7 @@ namespace Catalog.Products.Features.UpdateProduct
             var product = await dbContext.products.FindAsync([command.Product.Id], cancellationToken : cancellationToken);
             if (product == null)
             {
-                throw new Exception($"Product not found: {command.Product.Id}");
+                throw new ProductNotFoundException(command.Product.Id);
             }
             UpdateProductWithNewValues(product, command.Product);
             dbContext.products.Update(product);

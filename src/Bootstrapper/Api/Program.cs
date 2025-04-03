@@ -1,7 +1,10 @@
 
-using static System.Net.Mime.MediaTypeNames;
-
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog ((context, config) =>
+    config
+    .ReadFrom.Configuration(context.Configuration));
+   
+
 builder.Services
     .AddCarterWithAssemblies(typeof(CatalogModule).Assembly);
 // add services to the container
@@ -22,9 +25,11 @@ var app = builder.Build();
 
 // configure the HTTP request pipeline
 app.MapCarter();
+app.UseSerilogRequestLogging();
+app.UseExceptionHandler(options => { });
 app
     .UseCatalogModule()
     .UseBasketModule() 
     .UseOrderingModule();
-app.UseExceptionHandler(options => { });
+
 app.Run();

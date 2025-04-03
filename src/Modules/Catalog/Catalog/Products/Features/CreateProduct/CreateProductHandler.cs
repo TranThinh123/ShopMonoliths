@@ -18,20 +18,11 @@ namespace Catalog.Products.Features.CreateProduct
             RuleFor(x => x.Product.Price).GreaterThan(0).WithMessage("Price must be greater than 0");
         }
     }
-    internal class CreateProductHandler(CatalogDbContext dbContext, IValidator<CreateProductCommand> validator, ILogger<CreateProductHandler> logger) : ICommandHandler<CreateProductCommand, CreateProductResult>
+    internal class CreateProductHandler(CatalogDbContext dbContext) : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
-        {
-            // validation part
-            var result = await validator.ValidateAsync(command, cancellationToken);
-            var errors = result.Errors.Select(x=>x.ErrorMessage).ToList();
-            if(errors.Any())
-            {
-                throw new ValidationException(errors.FirstOrDefault());
-            }
-            // logging part
-            logger.LogInformation("CreateP roductCommandHandler.Handle called with {@Command}", command);
-            // actual logic
+        { 
+
             var product = CreateNewProduct(command.Product);
             dbContext.products.Add(product);
             await dbContext.SaveChangesAsync(cancellationToken);
